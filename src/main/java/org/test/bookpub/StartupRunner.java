@@ -22,7 +22,7 @@ public class StartupRunner implements CommandLineRunner {
         logger.info("Number of books: " + bookRepository.count());
     }
 
-    @Overrid
+    @Override
     public void run(String... args) throws Exception {
         logger.info("Number of books: " + bookRepository.count());
     }
