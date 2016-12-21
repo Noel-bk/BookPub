@@ -1,12 +1,15 @@
 package org.test.bookpub.controllers;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.test.bookpub.entity.Book;
 import org.test.bookpub.repository.BookRepository;
+
+import java.beans.PropertyEditorSupport;
 
 /**
  * Created by Noel on 12/18/16.
@@ -24,8 +27,40 @@ public class BookController {
     }
 
     @GetMapping(value = "/{isbn}")
-    public Book getBook(@PathVariable String isbn) {
-        return bookRepository.findBookByIsbn(isbn);
+    public Book getBook(@PathVariable Isbn isbn) {
+        return bookRepository.findBookByIsbn(isbn.getIsbn());
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public class Isbn {
+        private String isbn;
+    }
+
+    public class IsbnEditor extends PropertyEditorSupport {
+        @Override
+        public void setAsText(String text) throws IllegalArgumentException {
+            if (StringUtils.hasText(text)) {
+                setValue(new Isbn(text.trim()));
+            } else {
+                setValue(null);
+            }
+        }
+
+        @Override
+        public String getAsText() {
+            Isbn isbn = (Isbn) getValue();
+            if (isbn != null) {
+                return isbn.getIsbn();
+            } else {
+                return "";
+            }
+        }
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Isbn.class, new IsbnEditor());
     }
 
 }
