@@ -7,9 +7,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.test.bookpub.entity.Book;
+import org.test.bookpub.entity.Reviewer;
 import org.test.bookpub.repository.BookRepository;
 
 import java.beans.PropertyEditorSupport;
+import java.util.List;
 
 /**
  * Created by Noel on 12/18/16.
@@ -29,6 +31,11 @@ public class BookController {
     @GetMapping(value = "/{isbn}")
     public Book getBook(@PathVariable Isbn isbn) {
         return bookRepository.findBookByIsbn(isbn.getIsbn());
+    }
+
+    @GetMapping(value = "/{isbn}/reviewers")
+    public List<Reviewer> getReviewers(@PathVariable("isbn") Book book){
+        return book.getReviewers();
     }
 
     @Getter
