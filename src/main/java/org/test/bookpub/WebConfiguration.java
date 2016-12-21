@@ -2,6 +2,7 @@ package org.test.bookpub;
 
 import org.apache.catalina.filters.RemoteIpFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.test.bookpub.formatters.BookFormatter;
 import org.test.bookpub.repository.BookRepository;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Noel on 12/19/16.
@@ -36,6 +39,11 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public ByteArrayHttpMessageConverter byteArrayHttpMessageConverter() {
         return new ByteArrayHttpMessageConverter();
+    }
+
+    @Bean
+    public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer() {
+        return container -> container.setSessionTimeout(1, TimeUnit.MINUTES);
     }
 
     @Override

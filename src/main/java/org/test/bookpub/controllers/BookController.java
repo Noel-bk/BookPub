@@ -10,6 +10,7 @@ import org.test.bookpub.entity.Book;
 import org.test.bookpub.entity.Reviewer;
 import org.test.bookpub.repository.BookRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyEditorSupport;
 import java.util.List;
 
@@ -34,8 +35,13 @@ public class BookController {
     }
 
     @GetMapping(value = "/{isbn}/reviewers")
-    public List<Reviewer> getReviewers(@PathVariable("isbn") Book book){
+    public List<Reviewer> getReviewers(@PathVariable("isbn") Book book) {
         return book.getReviewers();
+    }
+
+    @GetMapping(value = "/session")
+    public String getSessionId(HttpServletRequest request) {
+        return request.getSession().getId();
     }
 
     @Getter
